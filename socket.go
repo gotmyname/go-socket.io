@@ -32,6 +32,10 @@ type Socket interface {
 
 	// BroadcastTo broadcasts an event to the room with given args.
 	BroadcastTo(room, event string, args ...interface{}) error
+  
+  Data() interface{}
+  
+  SetData(data interface{})
 }
 
 type socket struct {
@@ -39,6 +43,7 @@ type socket struct {
 	conn      engineio.Conn
 	namespace string
 	id        int
+  data      interface{}
 }
 
 func newSocket(conn engineio.Conn, base *baseHandler) *socket {
@@ -65,6 +70,14 @@ func (s *socket) Emit(event string, args ...interface{}) error {
 		s.conn.Close()
 	}
 	return nil
+}
+
+func (s *socket) Data() interface{} {
+	return s.data
+}
+
+func (s *socket) SetData(data interface{}) {
+	s.data = data
 }
 
 func (s *socket) send(args []interface{}) error {
