@@ -38,6 +38,8 @@ type Socket interface {
   SetData(data interface{})
   
   RemoteAddr() string
+  
+  Close()
 }
 
 type socket struct {
@@ -84,6 +86,10 @@ func (s *socket) Data() interface{} {
 
 func (s *socket) SetData(data interface{}) {
 	s.data = data
+}
+
+func (s *socket) Close() {
+  s.conn.Close()
 }
 
 func (s *socket) send(args []interface{}) error {
